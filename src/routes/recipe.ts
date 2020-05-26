@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
-const router = Router();
+const recipeRouter = Router();
 
-router.get('/', (req, res) => res.send(''));
+recipeRouter.get('/', (req, res) => res.send(''));
 
-export default router;
+export default recipeRouter;
