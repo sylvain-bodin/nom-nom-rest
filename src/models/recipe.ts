@@ -9,7 +9,7 @@ const recipeSchema = new Schema({
     type: String,
   },
   tags: {
-    type: String,
+    type: [String],
   },
 },
 { timestamps: true });
