@@ -15,5 +15,8 @@ module.exports = {
       'modules': true
     },
     tsconfigRootDir: __dirname,
-  }
+  },
+  ignorePatterns: [
+    '*.config.js'
+  ]
 };
