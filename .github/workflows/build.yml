@@ -56,23 +56,23 @@ jobs:
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
       - name: Clean install prod dependencies
-        run: npm install --only=prod
+        run: npm ci --only=prod
       - name: Save artifacts
         uses: actions/upload-artifact@v2
         with:
           name: modules-package
-          path: node-modules
+          path: node-modules/
   deploy:
     name: Deploy
     needs: package
     runs-on: ubuntu-latest
     steps:
-      - name: Get the artifact
+      - name: Get the artifact dist
         uses: actions/download-artifact@v2
         with:
           name: dist-package
           path: dist/src
-      - name: Get the artifact
+      - name: Get the artifact modules
         uses: actions/download-artifact@v2
         with:
           name: modules-package
