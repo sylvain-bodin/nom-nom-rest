@@ -56,8 +56,7 @@ jobs:
             ${{ runner.OS }}-node-
             ${{ runner.OS }}-
       - name: Clean install prod dependencies
-          run: |
-            npm install --only=prod
+          run: npm install --only=prod
       - name: Save artifacts
         uses: actions/upload-artifact@v2
         with:
