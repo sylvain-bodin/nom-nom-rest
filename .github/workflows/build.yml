@@ -76,7 +76,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: modules-package
-          path: node-modules
+          path: node_modules
       - name: Deploy on ssh server
         uses: easingthemes/ssh-deploy@v2.1.1
         env:
