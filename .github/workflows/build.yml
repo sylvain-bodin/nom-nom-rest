@@ -61,7 +61,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: modules-package
-          path: node-modules/
+          path: node_modules/
   deploy:
     name: Deploy
     needs: package
