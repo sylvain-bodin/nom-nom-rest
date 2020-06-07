@@ -20,17 +20,18 @@ describe('Import 750g Service', () => {
     expect(recipe.image).toBe(imageBase64);
     expect(recipe.tags).toContain('Facile');
     expect(recipe.tags).toContain('Bon marché');
-    const expectedIngredients = ['250 g de riz basmati',
-      '2 carottes',
-      '1 oignon',
-      '120 g de petits pois',
-      '2 blancs de poulet',
-      '4 pistils de safran',
-      '4 c. à s. d\'huile d\'olive',
-      '1 petit bouquet de persil',
-      '100 g d\'amandes effilées et grillées',
-      '0,25 c. à c. de sel ou sel fin',
-      '0,25 c. à c. de poivre'];
+    const expectedIngredients = [{ value: 250, unit: 'g', name: 'riz basmati' },
+      { value: 2, unit: undefined, name: 'carottes' },
+      { value: 1, unit: undefined, name: 'oignon' },
+      { value: 120, unit: 'g', name: 'petits pois' },
+      { value: 2, unit: undefined, name: 'blancs de poulet' },
+      { value: 4, unit: undefined, name: 'pistils de safran' },
+      { value: 4, unit: 'c. à s.', name: 'huile d\'olive' },
+      { value: 1, unit: undefined, name: 'petit bouquet de persil' },
+      { value: 100, unit: 'g', name: 'amandes effilées et grillées' },
+      { value: 0.25, unit: 'c. à c.', name: 'sel ou sel fin' },
+      { value: 0.25, unit: 'c. à c.', name: 'poivre' }];
     expect(recipe.ingredients).toStrictEqual(expectedIngredients);
+    expect(recipe.nbPortions).toBe(4);
   });
 });

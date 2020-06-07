@@ -1,7 +1,10 @@
+import { Ingredient } from './ingredient';
+
 export interface Recipe {
   _id: number | null;
   name: string;
-  ingredients: string[];
+  nbPortions?: number;
+  ingredients: Ingredient[];
   url?: string;
   image?: string;
   tags?: string[];
