@@ -1,5 +1,4 @@
 import { connect } from 'mongoose';
-import Recipe from './recipe';
 import { logger } from '../services/log';
 
 const connectDb = () => connect(process.env.DATABASE_URL as
@@ -7,7 +6,5 @@ const connectDb = () => connect(process.env.DATABASE_URL as
 { useNewUrlParser: true, useUnifiedTopology: true }).catch((error) => {
   logger.error(error, 'Error while connecting MongoDB');
 });
-const models = { Recipe };
 
-export { connectDb };
-export default models;
+export default connectDb;

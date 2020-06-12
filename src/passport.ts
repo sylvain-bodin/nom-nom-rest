@@ -28,8 +28,9 @@ passport.use(new Strategy({
       }
       return done(null, user);
     });
+  } else {
+    return done('No email');
   }
-  return done('No email');
 }));
 
 passport.serializeUser((user, next) => {
