@@ -3,9 +3,13 @@
     "module": "commonjs",
     "esModuleInterop": true,
     "target": "es6",
+    "lib": [
+      "es2020.string"
+    ],
     "strict": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
+    "resolveJsonModule": true,
     "sourceMap": true,
     "outDir": "dist",
     "baseUrl": ".",

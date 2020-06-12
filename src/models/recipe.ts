@@ -16,5 +16,5 @@ const recipeSchema = new Schema({
   },
 },
 { timestamps: true });
-const Recipe = model('Recipe', recipeSchema);
+const Recipe = model('recipes', recipeSchema);
 export default Recipe;
