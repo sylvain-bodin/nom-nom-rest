@@ -11,6 +11,7 @@ passport.use(new Strategy({
   callbackURL: '/auth/facebook/callback',
   profileFields: ['id', 'displayName', 'email'],
 
+// eslint-disable-next-line consistent-return
 }, (accessToken, refreshToken, profile, done) => {
   if (profile.emails && profile.emails.length > 0) {
     const searchQuery = {
