@@ -3,12 +3,12 @@ import passport from 'passport';
 import { Strategy } from 'passport-facebook';
 import User from './models/users';
 
-const { FB_APP_ID = '', FB_APP_SECRET = '' } = process.env;
+const { FB_APP_ID = '', FB_APP_SECRET = '', BASE_CALLBACK = '' } = process.env;
 
 passport.use(new Strategy({
   clientID: FB_APP_ID,
   clientSecret: FB_APP_SECRET,
-  callbackURL: '/auth/facebook/callback',
+  callbackURL: `${BASE_CALLBACK}/auth/facebook/callback`,
   profileFields: ['id', 'displayName', 'email'],
 
 // eslint-disable-next-line consistent-return

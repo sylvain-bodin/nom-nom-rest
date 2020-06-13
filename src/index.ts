@@ -9,12 +9,13 @@ import authRouter from './routes/auth';
 import passport from './passport';
 
 const PORT = process.env.PORT || 3000;
+const BASE_APP = process.env.BASE_APP || '';
 const app = express();
 
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: false }));
-app.use(cors({ credentials: true, origin: 'http://localhost:8080' }));
+app.use(cors({ credentials: true, origin: BASE_APP }));
 app.use(expressLogger);
 app.use(session({
   secret: 'nom-nom-secret', resave: false, saveUninitialized: false,
