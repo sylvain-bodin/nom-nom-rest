@@ -1,18 +1,23 @@
-import { model, Schema } from 'mongoose';
+import { model, Schema, SchemaTypes } from 'mongoose';
+
 
 const recipeSchema = new Schema({
   name: {
-    type: String,
+    type: SchemaTypes.String,
     required: true,
   },
   url: {
-    type: String,
+    type: SchemaTypes.String,
   },
   image: {
-    type: String,
+    type: SchemaTypes.String,
   },
   tags: {
-    type: [String],
+    type: [SchemaTypes.String],
+  },
+  user_id: {
+    type: SchemaTypes.ObjectId,
+    required: true,
   },
 },
 { timestamps: true });

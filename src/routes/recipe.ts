@@ -1,25 +1,43 @@
-import { Router } from 'express';
+import {
+  NextFunction, Request, Response, Router,
+} from 'express';
 import Recipe from '../models/recipe';
 import { logger } from '../services/log';
 
 const recipeRouter = Router();
 
-recipeRouter.get('/', async (req, res) => {
-  const recipes = await Recipe.find().catch((err) => {
+function authentifiedHandler(req: Request, res: Response, next: NextFunction) {
+  if (!req.user) {
+    res.sendStatus(401);
+  }
+  next();
+}
+
+recipeRouter.get('/', authentifiedHandler, async (req, res) => {
+  const searchQuery = {
+    // @ts-ignore
+    // eslint-disable-next-line no-underscore-dangle
+    user_id: req.user._id,
+  };
+  const recipes = await Recipe.find(searchQuery).catch((err) => {
     logger.error(err, 'Error getting recipes');
   });
   return res.send(recipes);
 });
 
-recipeRouter.get('/:id', async (req, res) => {
+recipeRouter.get('/:id', authentifiedHandler, async (req, res) => {
   const recipe = await Recipe.findById(req.params.id).catch((err) => {
     logger.error(err, `Error getting recipe ${req.params.id}`);
   });
   return res.send(recipe);
 });
 
-recipeRouter.post('/', async (req, res) => {
-  const recipe = await Recipe.create(req.body).catch((err) => {
+recipeRouter.post('/', authentifiedHandler, async (req, res) => {
+  const data = req.body;
+  // @ts-ignore
+  // eslint-disable-next-line no-underscore-dangle
+  data.user_id = req.user._id;
+  const recipe = await Recipe.create(data).catch((err) => {
     logger.error(err, 'Error getting recipes');
   });
   return res.send(recipe);
