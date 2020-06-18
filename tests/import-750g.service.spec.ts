@@ -33,5 +33,7 @@ describe('Import 750g Service', () => {
       { value: 0.25, unit: 'c. à c.', name: 'poivre' }];
     expect(recipe.ingredients).toStrictEqual(expectedIngredients);
     expect(recipe.nbPortions).toBe(4);
+    expect(recipe.preparationTime).toBe(30);
+    expect(recipe.cookingTime).toBe(26);
   });
 });

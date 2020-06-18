@@ -63,6 +63,7 @@ passport.use(new GoogleStrategy({
   callbackURL: `${BASE_CALLBACK}/auth/google/callback`,
   scope: ['openid', 'profile', 'email'],
 }, verify));
+
 passport.serializeUser((user, next) => {
   next(null, user);
 });

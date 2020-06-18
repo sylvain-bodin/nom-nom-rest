@@ -8,4 +8,6 @@ export interface Recipe {
   url?: string;
   image?: string;
   tags?: string[];
+  preparationTime?: number;
+  cookingTime?: number;
 }

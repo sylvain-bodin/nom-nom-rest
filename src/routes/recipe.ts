@@ -3,6 +3,7 @@ import {
 } from 'express';
 import Recipe from '../models/recipe';
 import { logger } from '../services/log';
+import importFactory from '../services/import.factory';
 
 const recipeRouter = Router();
 
@@ -30,6 +31,18 @@ recipeRouter.get('/:id', authentifiedHandler, async (req, res) => {
     logger.error(err, `Error getting recipe ${req.params.id}`);
   });
   return res.send(recipe);
+});
+
+recipeRouter.post('/import', authentifiedHandler, async (req, res) => {
+  const { url } = req.body;
+  let recipe;
+  try {
+    recipe = await importFactory.getService(url).import(url);
+  } catch (e) {
+    logger.error(e);
+    recipe = { name: '', url };
+  }
+  res.send(recipe);
 });
 
 recipeRouter.post('/', authentifiedHandler, async (req, res) => {
