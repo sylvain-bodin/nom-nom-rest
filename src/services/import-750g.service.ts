@@ -5,6 +5,7 @@ import {ImportService} from './import.service';
 import ImportUtils from './import-utils';
 
 class Import750gService implements ImportService {
+  // eslint-disable-next-line class-methods-use-this
   async import(url: string): Promise<Recipe> {
     const $ = await CrawlerService.getPage(url);
 
