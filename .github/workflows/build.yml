@@ -89,7 +89,7 @@ jobs:
   start:
     name: Start
     needs: deploy
-    rus-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Start node app
         uses: appleboy/ssh-action@v0.1.2
