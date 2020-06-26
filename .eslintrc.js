@@ -17,6 +17,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
   },
   ignorePatterns: [
-    '*.config.js'
+    '*.config.js',
+    'queries/'
   ]
 };

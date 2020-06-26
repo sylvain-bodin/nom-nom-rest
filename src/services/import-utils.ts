@@ -1,4 +1,4 @@
-import { Ingredient } from '../types/ingredient';
+import {Ingredient} from '../types/ingredient';
 
 class ImportUtils {
   static getCleanDirectText(element: Cheerio): string {
@@ -16,11 +16,11 @@ class ImportUtils {
    * @param ingredientText
    */
   static parseIngredient(ingredientText: string): Ingredient {
-    const regex = /^([0-9,./]+)\s*((g|c. à c.|c. à s.)(\s*(de|d')\s*))?(.*)$/gmiu;
+    const regex = /^([0-9,./]+)?\s*((g|c. à c.|c. à s.|cl)(\s*(de|d')\s*))?(.*)$/gmiu;
     const found = [...ingredientText.matchAll(regex)][0];
     const [, textValue, , unit, , , name] = found;
-    const value = Number.parseFloat((textValue as string).replace(',', '.'));
-    return { value, unit, name };
+    const value = textValue ? Number.parseFloat((textValue as string).replace(',', '.')) : undefined;
+    return {value, unit, name};
   }
 }
 

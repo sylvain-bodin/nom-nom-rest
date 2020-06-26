@@ -1,25 +1,32 @@
-import { model, Schema, SchemaTypes } from 'mongoose';
+import {model, Schema, SchemaTypes} from 'mongoose';
 
+const ingredientSchema = new Schema({
+  value: SchemaTypes.Number,
+  unit: SchemaTypes.String,
+  name: SchemaTypes.String,
+});
 
 const recipeSchema = new Schema({
-  name: {
-    type: SchemaTypes.String,
-    required: true,
+    name: {
+      type: SchemaTypes.String,
+      required: true,
+    },
+    url: SchemaTypes.String,
+    image: SchemaTypes.String,
+    tags: [SchemaTypes.String],
+    userId: {
+      type: SchemaTypes.ObjectId,
+      required:
+        true,
+    },
+    ingredients: [ingredientSchema],
+    nbPortion: SchemaTypes.Number,
+    preparationTime: SchemaTypes.Number,
+    waitingTime: SchemaTypes.Number,
+    cookingTime: SchemaTypes.Number,
   },
-  url: {
-    type: SchemaTypes.String,
-  },
-  image: {
-    type: SchemaTypes.String,
-  },
-  tags: {
-    type: [SchemaTypes.String],
-  },
-  user_id: {
-    type: SchemaTypes.ObjectId,
-    required: true,
-  },
-},
-{ timestamps: true });
+  {
+    timestamps: true,
+  });
 const Recipe = model('recipes', recipeSchema);
 export default Recipe;

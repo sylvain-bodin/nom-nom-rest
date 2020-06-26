@@ -1,7 +1,7 @@
-import { Recipe } from '../types/recipe';
+import {Recipe} from '../types/recipe';
 import CrawlerService from './crawler.service';
-import { Ingredient } from '../types/ingredient';
-import { ImportService } from './import.service';
+import {Ingredient} from '../types/ingredient';
+import {ImportService} from './import.service';
 import ImportUtils from './import-utils';
 
 class Import750gService implements ImportService {
@@ -13,9 +13,14 @@ class Import750gService implements ImportService {
 
     // Image
     let image;
-    const imageUrl = $('img.photo').attr('src');
+    let imageUrl = $('img.photo').attr('src');
+    // If the picture isn't visible, we get its URL from another attribute
+    if (!imageUrl) {
+      imageUrl = $('img.photo').attr('data-src');
+    }
     if (imageUrl) {
       image = await CrawlerService.getImage(imageUrl);
+      image = `data:image/jpeg;base64,${image}`;
     }
 
     // Tags
@@ -33,14 +38,28 @@ class Import750gService implements ImportService {
     });
 
     // Number of portions
-    const nbPortions = Number.parseInt($('.c-ingredient-variator-label').text(), 10);
+    let nbIngredientText = $('.c-ingredient-variator-label').text();
+    if (!nbIngredientText) {
+      nbIngredientText = $('.c-recipe-ingredients').siblings('.u-title-section').text();
+    }
+    const nbPortions = Number.parseInt(nbIngredientText, 10);
 
     // Times
     const preparationTime = Number.parseInt(ImportUtils.getCleanDirectText($('.c-recipe-summary__rating[title="Temps de préparation"]')), 10);
+    const waitingTime = Number.parseInt(ImportUtils.getCleanDirectText($('.c-recipe-summary__rating[title="Temps d\'attente"]')), 10);
     const cookingTime = Number.parseInt(ImportUtils.getCleanDirectText($('.c-recipe-summary__rating[title="Temps de cuisson"]')), 10);
 
     return {
-      _id: null, name, url, image, tags, ingredients, nbPortions, preparationTime, cookingTime,
+      _id: null,
+      name,
+      url,
+      image,
+      tags,
+      ingredients,
+      nbPortions,
+      preparationTime,
+      waitingTime,
+      cookingTime,
     };
   }
 }

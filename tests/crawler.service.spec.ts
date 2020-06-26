@@ -17,7 +17,7 @@ describe('Crawler Service', () => {
 
   it('should get the image data', async () => {
     // given
-    const image = fs.readFileSync('./tests/resources/image_recette.jpg');
+    const image = fs.readFileSync('./tests/resources/photo_riz_poulet.jpg');
     const imageBase64 = image.toString('base64');
 
     // when

@@ -1,7 +1,7 @@
-import { Ingredient } from './ingredient';
+import {Ingredient} from './ingredient';
 
 export interface Recipe {
-  _id: number | null;
+  _id: string | null;
   name: string;
   nbPortions?: number;
   ingredients: Ingredient[];
@@ -9,5 +9,6 @@ export interface Recipe {
   image?: string;
   tags?: string[];
   preparationTime?: number;
+  waitingTime?: number;
   cookingTime?: number;
 }
