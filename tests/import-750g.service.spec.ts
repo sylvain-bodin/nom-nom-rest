@@ -20,17 +20,17 @@ describe('Import 750g Service', () => {
     expect(recipe.image).toBe(imageBase64);
     expect(recipe.tags).toContain('Facile');
     expect(recipe.tags).toContain('Bon marché');
-    const expectedIngredients = [{value: 250, unit: 'g', name: 'riz basmati'},
-      {value: 2, unit: undefined, name: 'carottes'},
-      {value: 1, unit: undefined, name: 'oignon'},
-      {value: 120, unit: 'g', name: 'petits pois'},
-      {value: 2, unit: undefined, name: 'blancs de poulet'},
-      {value: 4, unit: undefined, name: 'pistils de safran'},
-      {value: 4, unit: 'c. à s.', name: 'huile d\'olive'},
-      {value: 1, unit: undefined, name: 'petit bouquet de persil'},
-      {value: 100, unit: 'g', name: 'amandes effilées et grillées'},
-      {value: 0.25, unit: 'c. à c.', name: 'sel ou sel fin'},
-      {value: 0.25, unit: 'c. à c.', name: 'poivre'}];
+    const expectedIngredients = [{ value: 250, unit: 'g', name: 'riz basmati' },
+      { value: 2, unit: undefined, name: 'carottes' },
+      { value: 1, unit: undefined, name: 'oignon' },
+      { value: 120, unit: 'g', name: 'petits pois' },
+      { value: 2, unit: undefined, name: 'blancs de poulet' },
+      { value: 4, unit: undefined, name: 'pistils de safran' },
+      { value: 4, unit: 'c. à s.', name: 'huile d\'olive' },
+      { value: 1, unit: undefined, name: 'petit bouquet de persil' },
+      { value: 100, unit: 'g', name: 'amandes effilées et grillées' },
+      { value: 0.25, unit: 'c. à c.', name: 'sel ou sel fin' },
+      { value: 0.25, unit: 'c. à c.', name: 'poivre' }];
     expect(recipe.ingredients).toStrictEqual(expectedIngredients);
     expect(recipe.nbPortions).toBe(4);
     expect(recipe.preparationTime).toBe(30);
@@ -72,7 +72,6 @@ describe('Import 750g Service', () => {
     expect(recipe.name).toBe('Nuggets fait-maison');
     expect(recipe.url).toBe('https://www.750g.com/nuggets-fait-maison-r205224.htm');
     expect(recipe.image).toBe(imageBase64);
-    // FIXME Fix this scrapping
-    // expect(recipe.nbPortions).toBe(12);
+    expect(recipe.nbPortions).toBe(12);
   });
 });
