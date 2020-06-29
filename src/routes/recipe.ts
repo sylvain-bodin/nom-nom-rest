@@ -22,7 +22,7 @@ recipeRouter.get('/', authentifiedHandler, async (req, res) => {
     // eslint-disable-next-line no-underscore-dangle
     userId: req.user._id,
   };
-  const recipes = await Recipe.find(searchQuery).catch((err) => {
+  const recipes = await Recipe.find(searchQuery).exec().catch((err) => {
     logger.error(err, 'Error getting recipes');
   });
   return res.send(recipes);
@@ -41,18 +41,13 @@ recipeRouter.post('/', authentifiedHandler, async (req, res) => {
   return res.sendStatus(201);
 });
 
-recipeRouter.get('/:id', authentifiedHandler, async (req, res) => {
-  const recipe = await Recipe.findById(req.params.id).catch((err) => {
-    logger.error(err, `Error getting recipe ${req.params.id}`);
+recipeRouter.get('/tags', authentifiedHandler, async (req, res) => {
+  // @ts-ignore
+  // eslint-disable-next-line no-underscore-dangle
+  const tags = await Recipe.distinct('tags', { userId: req.user._id }).exec().catch((err) => {
+    logger.error(err, 'Error getting tags');
   });
-  return res.send(recipe);
-});
-
-recipeRouter.delete('/:id', authentifiedHandler, async (req, res) => {
-  await Recipe.deleteOne({ _id: req.params.id }).catch((err) => {
-    logger.error(err, `Error getting recipe ${req.params.id}`);
-  });
-  return res.sendStatus(204);
+  res.send(tags);
 });
 
 recipeRouter.post('/import', authentifiedHandler, async (req, res) => {
@@ -67,13 +62,27 @@ recipeRouter.post('/import', authentifiedHandler, async (req, res) => {
   res.send(recipe);
 });
 
-recipeRouter.post('/ingredients/transform', authentifiedHandler, async (req, res) => {
+recipeRouter.post('/ingredients/transform', authentifiedHandler, (req, res) => {
   const { text } = req.body;
   const ingredients: Ingredient[] = [];
   text.split('\n').forEach((ingredientText: string) => {
     ingredients.push(ImportUtils.parseIngredient(ingredientText));
   });
   res.send(ingredients);
+});
+
+recipeRouter.get('/:id', authentifiedHandler, async (req, res) => {
+  const recipe = await Recipe.findById(req.params.id).exec().catch((err) => {
+    logger.error(err, `Error getting recipe ${req.params.id}`);
+  });
+  return res.send(recipe);
+});
+
+recipeRouter.delete('/:id', authentifiedHandler, async (req, res) => {
+  await Recipe.deleteOne({ _id: req.params.id }).exec().catch((err) => {
+    logger.error(err, `Error getting recipe ${req.params.id}`);
+  });
+  return res.sendStatus(204);
 });
 
 export default recipeRouter;
