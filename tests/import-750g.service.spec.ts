@@ -72,6 +72,20 @@ describe('Import 750g Service', () => {
     expect(recipe.name).toBe('Nuggets fait-maison');
     expect(recipe.url).toBe('https://www.750g.com/nuggets-fait-maison-r205224.htm');
     expect(recipe.image).toBe(imageBase64);
+  });
+
+  it('should get the number of portion if there is no cursor', async () => {
+    // given
+
+    // when
+    const recipe = await import750gService.import('https://www.750g.com/nuggets-fait-maison-r205224.htm');
+
+    // then
+    expect(recipe).not.toBeNull();
+    expect(recipe).toBeDefined();
+    // eslint-disable-next-line no-underscore-dangle
+    expect(recipe._id).toBeNull();
+    expect(recipe.name).toBe('Nuggets fait-maison');
     expect(recipe.nbPortions).toBe(12);
   });
 });

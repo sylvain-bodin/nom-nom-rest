@@ -11,7 +11,7 @@ class Import750gService implements ImportService {
     const $ = await CrawlerService.getPage(url);
 
     // Name
-    const name = $('.c-article__title').text();
+    const name = $('.recipe-title').text();
 
     // Image
     const image = await Import750gService.getImage($);
@@ -45,21 +45,21 @@ class Import750gService implements ImportService {
   }
 
   private static getCookingTime($: CheerioStatic) {
-    return Number.parseInt(ImportUtils.getCleanDirectText($('.c-recipe-summary__rating[title="Temps de cuisson"]')), 10);
+    return Number.parseInt(ImportUtils.getCleanDirectText($('.recipe-steps-info time[itemprop="cookTime"]')), 10);
   }
 
   private static getWaitingTime($: CheerioStatic) {
-    return Number.parseInt(ImportUtils.getCleanDirectText($('.c-recipe-summary__rating[title="Temps d\'attente"]')), 10);
+    return Number.parseInt(ImportUtils.getCleanDirectText($('.recipe-steps-info time:not([itemprop])')), 10);
   }
 
   private static getPreparationTime($: CheerioStatic) {
-    return Number.parseInt(ImportUtils.getCleanDirectText($('.c-recipe-summary__rating[title="Temps de préparation"]')), 10);
+    return Number.parseInt(ImportUtils.getCleanDirectText($('.recipe-steps-info time[itemprop="prepTime"]')), 10);
   }
 
   private static getNbPortions($: CheerioStatic) {
-    let nbIngredientText = $('.c-ingredient-variator-label').text();
+    let nbIngredientText = $('.ingredient-variator-label').text();
     if (!nbIngredientText) {
-      nbIngredientText = $('.c-recipe-ingredients').siblings('.u-title-section').text();
+      nbIngredientText = $('.recipe-ingredients > header').text();
     }
     const found = nbIngredientText.match(/([0-9]+)/);
     return Number.parseInt(found ? found[0] : '', 10);
@@ -67,7 +67,7 @@ class Import750gService implements ImportService {
 
   private static getIngredients($: CheerioStatic) {
     const ingredients: Ingredient[] = [];
-    $('.c-recipe-ingredients__list').children().each((index, ingredient) => {
+    $('.recipe-ingredients .recipe-ingredients-item-label').each((index, ingredient) => {
       const ingredientText = ImportUtils.getCleanDirectText($(ingredient));
       ingredients.push(ImportUtils.parseIngredient(ingredientText));
     });
@@ -76,20 +76,20 @@ class Import750gService implements ImportService {
 
   private static getTags($: CheerioStatic) {
     const tags: string[] = [];
-    const difficulty = ImportUtils.getCleanDirectText($('.c-recipe-summary__rating[title="Difficulté"]'));
+    const difficulty = ImportUtils.getCleanDirectText($('.recipe-info li:nth-child(2)'));
     tags.push(difficulty);
-    const price = ImportUtils.getCleanDirectText($('.c-recipe-summary__rating[title="Coût"]'));
+    const price = ImportUtils.getCleanDirectText($('.recipe-info li:nth-child(3)'));
     tags.push(price);
     return tags;
   }
 
   private static async getImage($: CheerioStatic) {
     let image;
-    const $img = $('img.photo');
+    const $img = $('.recipe-cover > img');
     let imageUrl = $img.attr('src');
     // If the picture isn't visible, we get its URL from another attribute
     if (!imageUrl) {
-      imageUrl = $img.attr('data-src');
+      imageUrl = $('.recipe-cover .js-jwPlayer-source').first().attr('data-image');
     }
     if (imageUrl) {
       image = await CrawlerService.getImage(imageUrl);
