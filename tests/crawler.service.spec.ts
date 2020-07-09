@@ -21,8 +21,7 @@ describe('Crawler Service', () => {
     const imageBase64 = image.toString('base64');
 
     // when
-    const expectedData = await crawlerService.getImage('https://static.750g.com/images/622-auto/59d5fcc850fd3b95d363b1ff64912202/riz-saute-au-poulet-et-aux-legumes.jpg');
-
+    const expectedData = await crawlerService.getImage('https://static.750g.com/images/640-420/59d5fcc850fd3b95d363b1ff64912202/riz-saute-au-poulet-et-aux-legumes.jpg');
     fs.writeFileSync('./tests/image_retour.jpg', expectedData);
     // then
     expect(expectedData).toBe(imageBase64);
