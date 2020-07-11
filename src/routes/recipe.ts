@@ -7,6 +7,7 @@ import importFactory from '../services/import.factory';
 import ImportUtils from '../services/import-utils';
 import { Ingredient } from '../types/ingredient';
 
+
 const recipeRouter = Router();
 
 function authentifiedHandler(req: Request, res: Response, next: NextFunction) {
@@ -17,12 +18,12 @@ function authentifiedHandler(req: Request, res: Response, next: NextFunction) {
 }
 
 recipeRouter.get('/', authentifiedHandler, async (req, res) => {
-  const searchQuery = {
+  const query = {
     // @ts-ignore
     // eslint-disable-next-line no-underscore-dangle
     userId: req.user._id,
   };
-  const recipes = await Recipe.find(searchQuery).exec().catch((err) => {
+  const recipes = await Recipe.find(query).lean().exec().catch((err) => {
     logger.error(err, 'Error getting recipes');
   });
   return res.send(recipes);
@@ -41,14 +42,38 @@ recipeRouter.post('/', authentifiedHandler, async (req, res) => {
   return res.sendStatus(201);
 });
 
+recipeRouter.get('/search', authentifiedHandler, async (req, res) => {
+  const range = req.query.range || '0-10';
+  const [first, last]:string[] = range.toString().split('-');
+  const skip = Number.parseInt(first, 10);
+  const limit = Number.parseInt(last, 10) - skip + 1;
+  const query = {
+    // @ts-ignore
+    // eslint-disable-next-line no-underscore-dangle
+    userId: req.user._id,
+  };
+  const projection = {
+    name: 1, preparationTime: 1, cookingTime: 1, waitingTime: 1, tags: 1,
+  };
+  const [recipes, itemCount] = await Promise.all([
+    Recipe.find(query, projection).limit(limit).skip(skip).lean()
+      .exec(),
+    Recipe.count(query),
+  ]);
+  return res.set('Content-Range', `recipes ${first}-${last}/${itemCount}`).send({
+    total: itemCount, items: recipes,
+  });
+});
+
 recipeRouter.get('/tags', authentifiedHandler, async (req, res) => {
   // @ts-ignore
   // eslint-disable-next-line no-underscore-dangle
-  const tags = await Recipe.distinct('tags', { userId: req.user._id }).exec().catch((err) => {
+  const tags = await Recipe.distinct('tags', { userId: req.user._id }).lean().exec().catch((err) => {
     logger.error(err, 'Error getting tags');
   });
   res.send(tags);
 });
+
 
 recipeRouter.post('/import', authentifiedHandler, async (req, res) => {
   const { url } = req.body;
@@ -72,7 +97,7 @@ recipeRouter.post('/ingredients/transform', authentifiedHandler, (req, res) => {
 });
 
 recipeRouter.get('/:id', authentifiedHandler, async (req, res) => {
-  const recipe = await Recipe.findById(req.params.id).exec().catch((err) => {
+  const recipe = await Recipe.findById(req.params.id).lean().exec().catch((err) => {
     logger.error(err, `Error getting recipe ${req.params.id}`);
   });
   return res.send(recipe);
