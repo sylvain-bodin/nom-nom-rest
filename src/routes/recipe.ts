@@ -44,6 +44,8 @@ recipeRouter.post('/', authentifiedHandler, async (req, res) => {
 
 recipeRouter.get('/search', authentifiedHandler, async (req, res) => {
   const range = req.query.range || '0-10';
+  const sort = req.query.sort || '';
+  const desc = req.query.desc || '';
   const [first, last]:string[] = range.toString().split('-');
   const skip = Number.parseInt(first, 10);
   const limit = Number.parseInt(last, 10) - skip + 1;
@@ -55,10 +57,27 @@ recipeRouter.get('/search', authentifiedHandler, async (req, res) => {
   const projection = {
     name: 1, preparationTime: 1, cookingTime: 1, waitingTime: 1, tags: 1,
   };
+  const sorting = {};
+  if (sort) {
+    // @ts-ignore
+    sorting[sort] = 1;
+  }
+  if (desc) {
+    // @ts-ignore
+    sorting[desc] = -1;
+  }
+  logger.info(sorting);
+  // @ts-ignore
+  logger.info(sort);
   const [recipes, itemCount] = await Promise.all([
-    Recipe.find(query, projection).limit(limit).skip(skip).lean()
+    Recipe.find(query)
+      .select(projection)
+      .sort(sorting)
+      .limit(limit)
+      .skip(skip)
+      .lean()
       .exec(),
-    Recipe.count(query),
+    Recipe.find(query).countDocuments(),
   ]);
   return res.set('Content-Range', `recipes ${first}-${last}/${itemCount}`).send({
     total: itemCount, items: recipes,
