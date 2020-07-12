@@ -6,6 +6,7 @@ import { logger } from '../services/log';
 import importFactory from '../services/import.factory';
 import ImportUtils from '../services/import-utils';
 import { Ingredient } from '../types/ingredient';
+import recipeService from '../services/recipe-service';
 
 
 const recipeRouter = Router();
@@ -43,41 +44,32 @@ recipeRouter.post('/', authentifiedHandler, async (req, res) => {
 });
 
 recipeRouter.get('/search', authentifiedHandler, async (req, res) => {
-  const range = req.query.range || '0-10';
-  const sort = req.query.sort || '';
-  const desc = req.query.desc || '';
-  const [first, last]:string[] = range.toString().split('-');
+  const range = req.query.range as string || '0-10';
+  const sort = req.query.sort as string || '';
+  const desc = req.query.desc as string || '';
+  // @ts-ignore
+  const userId = req.user?._id as string;
+  const [first, last]: string[] = range.split('-');
   const skip = Number.parseInt(first, 10);
   const limit = Number.parseInt(last, 10) - skip + 1;
-  const query = {
-    // @ts-ignore
-    // eslint-disable-next-line no-underscore-dangle
-    userId: req.user._id,
-  };
+  let sortField: string = '';
+  let sortOrder = 'asc';
+
   const projection = {
     name: 1, preparationTime: 1, cookingTime: 1, waitingTime: 1, tags: 1,
   };
-  const sorting = {};
+
   if (sort) {
-    // @ts-ignore
-    sorting[sort] = 1;
+    sortField = sort;
+    sortOrder = 'asc';
+  } else if (desc) {
+    sortField = desc;
+    sortOrder = 'desc';
   }
-  if (desc) {
-    // @ts-ignore
-    sorting[desc] = -1;
-  }
-  logger.info(sorting);
-  // @ts-ignore
-  logger.info(sort);
+
   const [recipes, itemCount] = await Promise.all([
-    Recipe.find(query)
-      .select(projection)
-      .sort(sorting)
-      .limit(limit)
-      .skip(skip)
-      .lean()
-      .exec(),
-    Recipe.find(query).countDocuments(),
+    recipeService.search(userId, projection, skip, limit, sortField, sortOrder),
+    Recipe.find({ userId }).countDocuments(),
   ]);
   return res.set('Content-Range', `recipes ${first}-${last}/${itemCount}`).send({
     total: itemCount, items: recipes,
