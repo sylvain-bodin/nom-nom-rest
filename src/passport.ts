@@ -1,4 +1,3 @@
-// Configuration des connexions via Passport
 import passport, { Profile } from 'passport';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import { Strategy as TwitterStrategy } from 'passport-twitter';

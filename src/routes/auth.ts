@@ -4,7 +4,7 @@ import passport from '../passport';
 const authRouter = Router();
 const baseApp = process.env.BASE_APP || '';
 
-authRouter.get('/facebook', passport.authenticate('facebook'));
+authRouter.get('/facebook', passport.authenticate('facebook', { scope: ['public_profile', 'email'] }));
 authRouter.get('/facebook/callback', passport.authenticate('facebook', {
   successRedirect: `${baseApp}/`,
   failureRedirect: `${baseApp}/login`,
