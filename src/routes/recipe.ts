@@ -44,9 +44,13 @@ recipeRouter.post('/', authentifiedHandler, async (req, res) => {
 });
 
 recipeRouter.get('/search', authentifiedHandler, async (req, res) => {
+  const projection = {
+    name: 1, preparationTime: 1, cookingTime: 1, waitingTime: 1, tags: 1,
+  };
   const range = req.query.range as string || '0-10';
   const sort = req.query.sort as string || '';
   const desc = req.query.desc as string || '';
+  const fields = req.query.fields as string[] || null;
   // @ts-ignore
   const userId = req.user?._id as string;
   const [first, last]: string[] = range.split('-');
@@ -55,10 +59,15 @@ recipeRouter.get('/search', authentifiedHandler, async (req, res) => {
   let sortField: string = '';
   let sortOrder = 'asc';
 
-  const projection = {
-    name: 1, preparationTime: 1, cookingTime: 1, waitingTime: 1, tags: 1,
-  };
-
+  let select = {};
+  if (fields) {
+    fields.forEach((item:string) => {
+      // @ts-ignore
+      select[item] = 1;
+    });
+  } else {
+    select = { ...projection };
+  }
   if (sort) {
     sortField = sort;
     sortOrder = 'asc';
@@ -67,8 +76,9 @@ recipeRouter.get('/search', authentifiedHandler, async (req, res) => {
     sortOrder = 'desc';
   }
 
+
   const [recipes, itemCount] = await Promise.all([
-    recipeService.search(userId, projection, skip, limit, sortField, sortOrder),
+    recipeService.search(userId, select, skip, limit, sortField, sortOrder),
     Recipe.find({ userId }).countDocuments(),
   ]);
   return res.set('Content-Range', `recipes ${first}-${last}/${itemCount}`).send({
