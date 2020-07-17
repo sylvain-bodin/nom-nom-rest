@@ -3,8 +3,8 @@ import {
 } from 'express';
 import Recipe from '../models/recipe';
 import { logger } from '../services/log';
-import importFactory from '../services/import.factory';
-import ImportUtils from '../services/import-utils';
+import importFactory from '../services/imports/import.factory';
+import ImportUtils from '../services/imports/import-utils';
 import { Ingredient } from '../types/ingredient';
 import recipeService from '../services/recipe-service';
 

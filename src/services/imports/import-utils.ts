@@ -1,4 +1,4 @@
-import {Ingredient} from '../types/ingredient';
+import {Ingredient} from '../../types/ingredient';
 
 class ImportUtils {
   static getCleanDirectText(element: Cheerio): string {

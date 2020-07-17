@@ -1,5 +1,5 @@
 import fs from 'fs';
-import import750gService from '../src/services/import-750g.service';
+import import750gService from '../src/services/imports/import-750g.service';
 
 describe('Import 750g Service', () => {
   it('should read page to create a recipe', async () => {

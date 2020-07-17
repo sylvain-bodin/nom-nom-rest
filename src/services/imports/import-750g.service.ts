@@ -1,6 +1,6 @@
-import { Recipe } from '../types/recipe';
-import CrawlerService from './crawler.service';
-import { Ingredient } from '../types/ingredient';
+import { Recipe } from '../../types/recipe';
+import CrawlerService from '../crawler.service';
+import { Ingredient } from '../../types/ingredient';
 import { ImportService } from './import.service';
 import ImportUtils from './import-utils';
 
