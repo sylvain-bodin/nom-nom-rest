@@ -54,7 +54,7 @@ describe('Import CuisineAZ Service', () => {
 
   it('should get the image if there is a video', async () => {
     // given
-    const image = fs.readFileSync('./tests/resources/photo_gratin_courgettes');
+    const image = fs.readFileSync('./tests/resources/photo_gratin_courgettes.jpg');
     const imageBase64 = `data:image/jpeg;base64,${image.toString('base64')}`;
 
     // when

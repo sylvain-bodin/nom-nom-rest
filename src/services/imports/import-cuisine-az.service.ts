@@ -45,11 +45,11 @@ class ImportCuisineAzService implements ImportService {
   }
 
   private static getCookingTime($: CheerioStatic) {
-    return Number.parseInt(ImportUtils.getCleanDirectText($('#ContentPlaceHolder_trCuisson')), 10);
+    return Number.parseInt(ImportUtils.getCleanDirectText($('#ContentPlaceHolder_LblRecetteTempsCuisson')), 10);
   }
 
   private static getWaitingTime($: CheerioStatic) {
-    return Number.parseInt(ImportUtils.getCleanDirectText($('#ContentPlaceHolder_trRepos')), 10);
+    return Number.parseInt(ImportUtils.getCleanDirectText($('#ContentPlaceHolder_LblRecetteTempsRepos')), 10);
   }
 
   private static getPreparationTime($: CheerioStatic) {
@@ -81,7 +81,7 @@ class ImportCuisineAzService implements ImportService {
   private static async getImage($: CheerioStatic) {
     let image;
     const $img = $('.recipe_img > img');
-    let imageUrl = $img.attr('src');
+    let imageUrl = $img.attr('data-src');
     if (imageUrl) {
       image = await CrawlerService.getImage(imageUrl);
       image = `data:image/jpeg;base64,${image}`;
