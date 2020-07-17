@@ -1,5 +1,5 @@
 import fs from 'fs';
-import importCuisineAZService from '../src/services/imports/import-cuisine-az.service';
+import importCuisineAZService from '../../src/services/imports/import-cuisine-az.service';
 
 describe('Import CuisineAZ Service', () => {
   it('should read page to create a recipe', async () => {
