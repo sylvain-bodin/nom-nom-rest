@@ -57,7 +57,7 @@ class ImportCuisineAzService implements ImportService {
   }
 
   private static getNbPortions($: CheerioStatic) {
-    let nbIngredientText = $('#ContentPlaceHolder_LblRecetteNombre').text();
+    const nbIngredientText = $('#ContentPlaceHolder_LblRecetteNombre').text();
     const found = nbIngredientText.match(/([0-9]+)/);
     return Number.parseInt(found ? found[0] : '', 10);
   }
@@ -65,7 +65,7 @@ class ImportCuisineAzService implements ImportService {
   private static getIngredients($: CheerioStatic) {
     const ingredients: Ingredient[] = [];
     $('.ingredients li').each((index, ingredient) => {
-      const ingredientText = ImportUtils.getCleanDirectText($(ingredient));
+      const ingredientText = $(ingredient).text().trim();
       ingredients.push(ImportUtils.parseIngredient(ingredientText));
     });
     return ingredients;
@@ -81,7 +81,7 @@ class ImportCuisineAzService implements ImportService {
   private static async getImage($: CheerioStatic) {
     let image;
     const $img = $('.recipe_img > img');
-    let imageUrl = $img.attr('data-src');
+    const imageUrl = $img.attr('data-src');
     if (imageUrl) {
       image = await CrawlerService.getImage(imageUrl);
       image = `data:image/jpeg;base64,${image}`;

@@ -27,7 +27,6 @@ class ImportMarmitonService implements ImportService {
 
     // Times
     const preparationTime = ImportMarmitonService.getPreparationTime($);
-    const waitingTime = ImportMarmitonService.getWaitingTime($);
     const cookingTime = ImportMarmitonService.getCookingTime($);
 
     return {
@@ -39,17 +38,12 @@ class ImportMarmitonService implements ImportService {
       ingredients,
       nbPortions,
       preparationTime,
-      waitingTime,
       cookingTime,
     };
   }
 
   private static getCookingTime($: CheerioStatic) {
-    return Number.parseInt(ImportUtils.getCleanDirectText($('.recipe-infos__timmings__cooking')), 10);
-  }
-
-  private static getWaitingTime($: CheerioStatic) {
-    return Number.parseInt(ImportUtils.getCleanDirectText($('.recipe-steps-info time:not([itemprop])')), 10);
+    return Number.parseInt($('.recipe-infos__timmings__cooking .recipe-infos__timmings__value').text().trim(), 10);
   }
 
   private static getPreparationTime($: CheerioStatic) {
@@ -57,7 +51,7 @@ class ImportMarmitonService implements ImportService {
   }
 
   private static getNbPortions($: CheerioStatic) {
-    let nbIngredientText = $('.recipe-infos__quantity__value').text();
+    const nbIngredientText = $('.recipe-infos__quantity__value').text();
     const found = nbIngredientText.match(/([0-9]+)/);
     return Number.parseInt(found ? found[0] : '', 10);
   }
@@ -65,7 +59,7 @@ class ImportMarmitonService implements ImportService {
   private static getIngredients($: CheerioStatic) {
     const ingredients: Ingredient[] = [];
     $('.recipe-ingredients__list__item').each((index, ingredient) => {
-      const ingredientText = ImportUtils.getCleanDirectText($(ingredient));
+      const ingredientText = $(ingredient).text().trim();
       ingredients.push(ImportUtils.parseIngredient(ingredientText));
     });
     return ingredients;
@@ -76,9 +70,9 @@ class ImportMarmitonService implements ImportService {
     const difficulty = ImportUtils.getCleanDirectText($('.recipe-infos__level .recipe-infos__item-title '));
     tags.push(difficulty);
     const price = ImportUtils.getCleanDirectText($('.recipe-infos__budget .recipe-infos__item-title'));
-    tags.push(price)
-    $('.mrtn-tags-list .mrtn-tag').each((index, tag)=> {
-      const tagText = ImportUtils.getCleanDirectText($(tag))
+    tags.push(price);
+    $('.mrtn-tags-list .mrtn-tag').each((index, tag) => {
+      const tagText = $(tag).text().trim();
       tags.push(tagText);
     });
     return tags;
@@ -90,7 +84,7 @@ class ImportMarmitonService implements ImportService {
     let imageUrl = $img.attr('data-src');
     // If the picture isn't visible, we get its URL from another attribute
     if (!imageUrl) {
-      imageUrl = $('.af-pin-it-wrapper .img').attr('src');
+      imageUrl = $('.af-pin-it-wrapper img').attr('src');
     }
     if (imageUrl) {
       image = await CrawlerService.getImage(imageUrl);
