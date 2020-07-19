@@ -6,13 +6,7 @@ class RecipeService {
     select: Object,
     skip: number,
     limit: number,
-    sortField: string,
-    sortOrder: string) {
-    const sort: Object = {};
-    if (sortField) {
-      // @ts-ignore
-      sort[sortField] = sortOrder;
-    }
+    sort:Object) {
     const query = {
       userId,
     };

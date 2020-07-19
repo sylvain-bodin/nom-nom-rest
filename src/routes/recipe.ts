@@ -47,41 +47,45 @@ recipeRouter.get('/search', authentifiedHandler, async (req, res) => {
   const projection = {
     name: 1, preparationTime: 1, cookingTime: 1, waitingTime: 1, tags: 1,
   };
-  const range = req.query.range as string || '0-10';
-  const sort = req.query.sort as string || '';
-  const desc = req.query.desc as string || '';
-  const fields = req.query.fields as string[] || null;
+  const limit = req.query.limit as string || null;
+  const offset = req.query.offset as string || null;
+  const sort = req.query.sort as string || null;
+  const fields = req.query.fields as string || null;
   // @ts-ignore
   const userId = req.user?._id as string;
-  const [first, last]: string[] = range.split('-');
-  const skip = Number.parseInt(first, 10);
-  const limit = Number.parseInt(last, 10) - skip + 1;
-  let sortField: string = '';
-  let sortOrder = 'asc';
 
   let select = {};
   if (fields) {
-    fields.forEach((item:string) => {
+    fields.split(',').forEach((item:string) => {
       // @ts-ignore
       select[item] = 1;
     });
   } else {
     select = { ...projection };
   }
+  const sorting = {};
   if (sort) {
-    sortField = sort;
-    sortOrder = 'asc';
-  } else if (desc) {
-    sortField = desc;
-    sortOrder = 'desc';
+    sort.split(',').forEach((item) => {
+      const sortField = item.slice(1);
+      // @ts-ignore
+      sorting[sortField] = Number.parseInt(item.slice(0, 1) + 1, 10);
+    });
+  }
+  let numberLimit = 50;
+  if (limit) {
+    numberLimit = Number.parseInt(limit, 10);
+  }
+  let skip = 0;
+  if (offset) {
+    skip = Number.parseInt(offset, 10);
   }
 
 
   const [recipes, itemCount] = await Promise.all([
-    recipeService.search(userId, select, skip, limit, sortField, sortOrder),
+    recipeService.search(userId, select, skip, numberLimit, sorting),
     Recipe.find({ userId }).countDocuments(),
   ]);
-  return res.set('Content-Range', `recipes ${first}-${last}/${itemCount}`).send({
+  return res.set('Content-Range', `recipes ${skip}-${skip + numberLimit}/${itemCount}`).send({
     total: itemCount, items: recipes,
   });
 });
