@@ -1,5 +1,5 @@
 import fs from 'fs';
-import importMarmitonService from '../../src/services/imports/import-marmiton.service';
+import importMarmitonService from '../../../src/services/imports/import-marmiton.service';
 
 describe('Import Marmiton Service', () => {
   it('should read page to create a recipe', async () => {

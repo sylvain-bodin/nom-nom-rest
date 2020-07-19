@@ -1,5 +1,5 @@
 import fs from 'fs';
-import importCuisineAZService from '../../src/services/imports/import-cuisine-az.service';
+import importCuisineAZService from '../../../src/services/imports/import-cuisine-az.service';
 
 describe('Import CuisineAZ Service', () => {
   it('should read page to create a recipe', async () => {
@@ -69,5 +69,4 @@ describe('Import CuisineAZ Service', () => {
     expect(recipe.url).toBe('https://www.cuisineaz.com/recettes/gratin-de-courgettes-simple-49574.aspx');
     expect(recipe.image).toBe(imageBase64);
   });
-
 });

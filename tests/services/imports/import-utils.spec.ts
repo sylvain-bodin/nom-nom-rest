@@ -1,4 +1,4 @@
-import ImportUtils from '../../src/services/imports/import-utils';
+import ImportUtils from '../../../src/services/imports/import-utils';
 
 describe('Import utils', () => {
   describe('parseIngredient', () => {

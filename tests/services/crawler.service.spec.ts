@@ -1,5 +1,5 @@
 import fs from 'fs';
-import crawlerService from '../src/services/crawler.service';
+import crawlerService from '../../src/services/crawler.service';
 
 
 describe('Crawler Service', () => {
